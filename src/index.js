@@ -16,9 +16,9 @@ window.$fxhashData = feet;
 // FX Features
 window.$fxhashFeatures = {
   "Palette" : feet.color.inverted ? feet.color.name + " Invert" : feet.color.name,
-  "Scale" : feet.scale.tag,
-  "Speed": feet.speed.tag,
-  "Density": feet.density.tag
+  "Density": feet.density.tag,
+  "Base Geometry": feet.wireframe.tag,
+  "Toon Geometries": feet.toonGeom.tag
 };
 console.log(window.$fxhashFeatures);
 //console.log(feet);

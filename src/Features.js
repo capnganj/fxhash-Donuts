@@ -10,21 +10,6 @@ class Features {
         };
         this.setColorPalette();
 
-        //scale of vertex wigglers
-        this.scale = {
-            tag: "",
-            value: 0.0,
-            dispValue: 0.0
-        }
-        this.setScale();
-
-        //drives how fast the wiggle and wave speeds roll
-        this.speed = {
-            tag: "",
-            vertexValue: 1.0,
-            fragmentValue: 1.0
-        }
-        this.setSpeed();
 
         //drives bubble density in the textures generation
         this.density = {
@@ -32,6 +17,17 @@ class Features {
             value: 0
         }
         this.setDensity();
+
+        //which wireframe geometry - donut or sphere?
+        this.wireframe = {
+            tag: "",
+        }
+
+        //which toon geometries - donuts or sheres or both?
+        this.toonGeom = {
+            tag: "",
+        }
+        this.setGeometries();
     }
 
     //map function logic from processing <3
@@ -173,41 +169,6 @@ class Features {
         }
     }
 
-    //set bump and texture scale
-    setScale() {
-        let s = fxrand();
-        if (s < 0.23) {
-            this.scale.tag = "Smooth";
-        }
-        else if (s < 0.57) {
-            this.scale.tag = "Low";
-        }
-        else {
-            this.scale.tag = "High";
-        }
-        this.scale.value = this.map(s, 0, 1, 1.0, 3.0);
-        this.scale.dispValue = this.map(s, 0, 1, 0.125, 0.25);
-    }
-
-    //set vertex and fragment speeds
-    setSpeed(){
-        let s = fxrand();
-        if (s < 0.44) {
-            this.speed.tag = "Slow";
-        }
-        else if (s < 0.61) {
-            this.speed.tag = "Steady";
-        }
-        else if (s < 0.88) {
-            this.speed.tag = "Fast";
-        }
-        else{
-            this.speed.tag = "Zippy"
-        }
-        this.speed.vertexValue = this.map(s, 0, 1, 0.25, 0.75);
-        this.speed.fragmentValue = this.map(s, 0, 1, 0.25, 1.75);
-    }
-
     //set texture density
     setDensity(){
         let d = fxrand();
@@ -224,6 +185,36 @@ class Features {
             this.density.tag = "Packed"
         }
         this.density.value = parseInt(this.map(d, 0, 1, 10, 100));
+    }
+
+    setGeometries() {
+        let wire = fxrand();
+        let toon = fxrand();
+
+        //wireframe geometry selection
+        if (wire < 0.11) {
+            this.wireframe.tag = "Left Donut";
+        }
+        else if (wire < 0.22) {
+            this.wireframe.tag = "Right Donut";
+        } 
+        else if (wire < 0.33) {
+            this.wireframe.tag = "Donut";
+        } 
+        else {
+            this.wireframe.tag = "Donut Hole"
+        }
+
+        //toon geometry selection
+        if (toon < 0.44) {
+            this.toonGeom.tag = "Donuts";
+        }
+        else if (wire < 0.77) {
+            this.toonGeom.tag = "Donut Holes";
+        } 
+        else {
+            this.toonGeom.tag = "Donuts and Donut Holes"
+        }
     }
 }
 
