@@ -99,11 +99,41 @@ function init() {
   // const wireframe = new THREE.Mesh(torus, dashing);
   // scene.add(wireframe);
 
-  //shere geometry to hang
-  const sphere = new THREE.SphereBufferGeometry(0.1);
+  //wireframe geometry to hang on
+  let wireframe = {};
+  if (feet.wireframe.tag.includes("Hole")) {
+    wireframe = new THREE.IcosahedronBufferGeometry(
+      3, 
+      Math.round(feet.map(fxrand(), 0, 1, 2, 12))
+    );
+  } else {
+    wireframe = new THREE.TorusBufferGeometry(
+      2, 1,
+      25,
+      50
+    );
+    if (feet.wireframe.tag.includes("Left")) {
+      wireframe.rotateY(Math.PI/2)
+    } 
+    else if (feet.wireframe.tag.includes("Right")) {
+    }
+    else {
+      wireframe.rotateX(Math.PI/2);
+    }
+  }
+
+  //toon geometries - donuts and donut holes that hang on the wireframe's vertices
+  let toonGeometry = {}
+  if (feet.toonGeom.tag.includes("Holes")) {
+    toonGeometry = new THREE.SphereBufferGeometry(0.1);
+  } else {
+    toonGeometry = new THREE.TorusBufferGeometry(0.1, 0.05, 10, 20 )
+    //miniTorus.rotateY(Math.PI/2)
+  }
+  //const sphere = new THREE.SphereBufferGeometry(0.1);
   //const pill = new THREE.CapsuleBufferGeometry(0.1, 0.2, 10, 20)
-  const miniTorus = new THREE.TorusBufferGeometry(0.1, 0.05, 10, 20 )
-  miniTorus.rotateY(Math.PI/2)
+  //const miniTorus = new THREE.TorusBufferGeometry(0.1, 0.05, 10, 20 )
+  //miniTorus.rotateY(Math.PI/2)
 
   
 
@@ -112,7 +142,7 @@ function init() {
 
   //toon
   const format = ( renderer.capabilities.isWebGL2 ) ? THREE.RedFormat : THREE.LuminanceFormat;
-  const colors = new Uint8Array(5);
+  const colors = new Uint8Array(7);
   for (let c = 0; c < colors.length; c++) {
     colors[c] = (c/colors.length) * 256;
   }
@@ -124,16 +154,27 @@ function init() {
   });
 
   //mesh instance geometry for battery life
-  const iMesh = new THREE.InstancedMesh(miniTorus, toon, torus.attributes.position.length/3,);
+  const iMesh = new THREE.InstancedMesh(toonGeometry, toon, wireframe.attributes.position.length/3,);
   scene.add(iMesh)
 
   //loop over torus and instantiate meshes with random colors
-  for (let i = 0; i < torus.attributes.position.array.length; i=i+3) {
+  for (let i = 0, u = 0; i < wireframe.attributes.position.array.length; i=i+3, u=u+2) {
     
+    //position
     const m = new THREE.Matrix4();
-    m.setPosition(torus.attributes.position.array[i], torus.attributes.position.array[i+1], torus.attributes.position.array[i+2]);
+    m.setPosition(wireframe.attributes.position.array[i], wireframe.attributes.position.array[i+1], wireframe.attributes.position.array[i+2]);
+
+    //size
+    if (!feet.wireframe.tag.includes("Hole")) {
+      const s = u < wireframe.attributes.uv.length / 2 ? 
+        feet.map(wireframe.attributes.uv.array[u+1], 0, 0.5, 1, 0.2) :
+        feet.map(wireframe.attributes.uv.array[u+1], 0.5, 1, 0.2, 1) ;
+      m.scale( new THREE.Vector3(s,s,s))
+    }
+
     iMesh.setMatrixAt(i/3, m);
 
+    //colors
     const rgb = feet.interpolateFn(fxrand());
     const col = new THREE.Color(rgb.r/255, rgb.g/255, rgb.b/255);
     iMesh.setColorAt(i/3, col);
