@@ -176,7 +176,7 @@ class Features {
             this.density.tag = "Sparse";
         }
         else if (d < 0.55) {
-            this.density.tag = "Even";
+            this.density.tag = "Nice";
         }
         else if (d < 0.88) {
             this.density.tag = "Dense";
@@ -184,7 +184,7 @@ class Features {
         else{
             this.density.tag = "Packed"
         }
-        this.density.value = parseInt(this.map(d, 0, 1, 10, 100));
+        this.density.value = d;
     }
 
     setGeometries() {

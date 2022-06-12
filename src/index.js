@@ -49,21 +49,19 @@ init();
 function init() {
   //scene & camera
   scene = new THREE.Scene();
-  //let bc = feet.desaturateColor(feet.color.background, 1.5);
   scene.background = new THREE.Color(235/255, 213/255, 179/255);
 
   renderer = new THREE.WebGLRenderer( { 
     antialias: true,
     alpha: true
   } );
-  
   renderer.setPixelRatio( window.devicePixelRatio );
   renderer.setSize( window.innerWidth, window.innerHeight );
   renderer.domElement.id = "hashish";
   document.body.appendChild( renderer.domElement );
 
-  camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.01, 1000 );
-  camera.position.set( 4, 4, 4 );
+  camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.01, 100 );
+  camera.position.set( 4.20, 4.20, 4.20 );
 
   //lights
   const p1 = new THREE.PointLight( 0xcccccc, 0.666 );
@@ -88,29 +86,18 @@ function init() {
 
   //geometry!
 
-  //torus provides base points to hang on
-  const torus = new THREE.IcosahedronBufferGeometry(3, Math.round(feet.map(fxrand(), 0, 1, 2, 12)));
-
-  // const dashing = new THREE.MeshStandardMaterial({
-  //   color: 0x000000,
-  //   wireframe: true,
-  // })
-
-  // const wireframe = new THREE.Mesh(torus, dashing);
-  // scene.add(wireframe);
-
   //wireframe geometry to hang on
   let wireframe = {};
   if (feet.wireframe.tag.includes("Hole")) {
     wireframe = new THREE.IcosahedronBufferGeometry(
       3, 
-      Math.round(feet.map(fxrand(), 0, 1, 2, 12))
+      Math.round(feet.map(feet.density.value, 0, 1, 3, 11))
     );
   } else {
     wireframe = new THREE.TorusBufferGeometry(
       2, 1,
-      25,
-      50
+      Math.round(feet.map(feet.density.value, 0, 1, 20, 30)),
+      Math.round(feet.map(feet.density.value, 0, 1, 30, 50))
     );
     if (feet.wireframe.tag.includes("Left")) {
       wireframe.rotateY(Math.PI/2)
@@ -154,11 +141,11 @@ function init() {
   });
 
   //mesh instance geometry for battery life
-  const iMesh = new THREE.InstancedMesh(toonGeometry, toon, wireframe.attributes.position.length/3,);
+  const iMesh = new THREE.InstancedMesh(toonGeometry, toon, wireframe.attributes.position.count,);
   scene.add(iMesh)
 
   //loop over torus and instantiate meshes with random colors
-  for (let i = 0, u = 0; i < wireframe.attributes.position.array.length; i=i+3, u=u+2) {
+  for (let i = 0, u = 0; i < wireframe.attributes.position.count * 3; i=i+3, u=u+2) {
     
     //position
     const m = new THREE.Matrix4();
@@ -166,9 +153,9 @@ function init() {
 
     //size
     if (!feet.wireframe.tag.includes("Hole")) {
-      const s = u < wireframe.attributes.uv.length / 2 ? 
-        feet.map(wireframe.attributes.uv.array[u+1], 0, 0.5, 1, 0.2) :
-        feet.map(wireframe.attributes.uv.array[u+1], 0.5, 1, 0.2, 1) ;
+      const s = u < wireframe.attributes.uv.count ? 
+        feet.map(wireframe.attributes.uv.array[u+1], 0, 0.5, 1, 0.4) :
+        feet.map(wireframe.attributes.uv.array[u+1], 0.5, 1, 0.4, 1) ;
       m.scale( new THREE.Vector3(s,s,s))
     }
 
@@ -185,6 +172,7 @@ function init() {
 
   //set up resize listener and let it rip!
   window.addEventListener( 'resize', onWindowResize );
+  renderer.domElement.addEventListener( 'dblclick', toggleAutorotate);
   animate();
 }
 
@@ -219,6 +207,10 @@ function render() {
 
   //mesh.rotation.y += 0.001;
 
+}
+
+function toggleAutorotate() {
+  controls.autoRotate= !controls.autoRotate;
 }
 
 function download() {
