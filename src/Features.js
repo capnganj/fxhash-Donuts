@@ -226,15 +226,18 @@ class Features {
         }
 
         //toon geometry selection
-        if (toon < 0.44) {
-            this.toonGeom.tag = "Donuts";
+        if (toon < 0.14) {
+            this.toonGeom.tag = "Left Donuts";
         }
-        else if (wire < 0.77) {
+        else if (toon < 0.29) {
+            this.toonGeom.tag = "Right Donuts"
+        }
+        else if (toon < 0.41) {
+            this.toonGeom.tag = "Donuts"
+        }
+        else  {
             this.toonGeom.tag = "Donut Holes";
         } 
-        else {
-            this.toonGeom.tag = "Donuts and Donut Holes"
-        }
     }
 }
 

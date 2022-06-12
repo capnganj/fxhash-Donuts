@@ -78,7 +78,7 @@ function init() {
   controls = new OrbitControls( camera, renderer.domElement );
   controls.enableDamping=true;
   controls.dampingFactor = 0.2;
-  //controls.autoRotate= true;
+  controls.autoRotate= true;
   controls.autoRotateSpeed = 1.0;
   controls.maxDistance = 10;
   controls.minDistance = 1;
@@ -117,7 +117,14 @@ function init() {
     toonGeometry = new THREE.SphereBufferGeometry(0.1);
   } else {
     toonGeometry = new THREE.TorusBufferGeometry(0.1, 0.05, 10, 20 )
-    //miniTorus.rotateY(Math.PI/2)
+    if (feet.toonGeom.tag.includes("Left")) {
+      toonGeometry.rotateY(Math.PI/2)
+    } 
+    else if(feet.toonGeom.tag.includes("Right")) {
+    }
+    else {
+      toonGeometry.rotateX(Math.PI/2)
+    }
   }
   //const sphere = new THREE.SphereBufferGeometry(0.1);
   //const pill = new THREE.CapsuleBufferGeometry(0.1, 0.2, 10, 20)
