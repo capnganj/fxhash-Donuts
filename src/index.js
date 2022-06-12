@@ -17,6 +17,7 @@ window.$fxhashData = feet;
 window.$fxhashFeatures = {
   "Palette" : feet.color.inverted ? feet.color.name + " Invert" : feet.color.name,
   "Density": feet.density.tag,
+  "Noise": feet.noise.tag,
   "Base Geometry": feet.wireframe.tag,
   "Toon Geometries": feet.toonGeom.tag
 };
@@ -96,8 +97,8 @@ function init() {
   } else {
     wireframe = new THREE.TorusBufferGeometry(
       2, 1,
-      Math.round(feet.map(feet.density.value, 0, 1, 20, 30)),
-      Math.round(feet.map(feet.density.value, 0, 1, 30, 50))
+      Math.round(feet.map(feet.density.value, 0, 1, 15, 25)),
+      Math.round(feet.map(feet.density.value, 0, 1, 30, 40))
     );
     if (feet.wireframe.tag.includes("Left")) {
       wireframe.rotateY(Math.PI/2)
@@ -108,6 +109,7 @@ function init() {
       wireframe.rotateX(Math.PI/2);
     }
   }
+  wireframe.computeBoundingBox();
 
   //toon geometries - donuts and donut holes that hang on the wireframe's vertices
   let toonGeometry = {}
@@ -155,14 +157,20 @@ function init() {
     if (!feet.wireframe.tag.includes("Hole")) {
       const s = u < wireframe.attributes.uv.count ? 
         feet.map(wireframe.attributes.uv.array[u+1], 0, 0.5, 1, 0.4) :
-        feet.map(wireframe.attributes.uv.array[u+1], 0.5, 1, 0.4, 1) ;
+        feet.map(wireframe.attributes.uv.array[u+1], 0.5, 1.0, 0.4, 1) ;
       m.scale( new THREE.Vector3(s,s,s))
     }
 
     iMesh.setMatrixAt(i/3, m);
 
     //colors
-    const rgb = feet.interpolateFn(fxrand());
+
+    //use noise value to set up a random addition value - how far do we want to jump inside of the gradient?
+    const rgbNoise = feet.map(fxrand(), 0, 1, feet.noise.value * -1, feet.noise.value)
+    const y = feet.map(wireframe.attributes.position.array[i+1], wireframe.boundingBox.min.y, wireframe.boundingBox.max.y, 0, 1)
+    const t = feet.map(rgbNoise + y, 0, 1, 0, 1);
+
+    const rgb = feet.interpolateFn(feet.color.inverted ? 1-t : t);
     const col = new THREE.Color(rgb.r/255, rgb.g/255, rgb.b/255);
     iMesh.setColorAt(i/3, col);
     

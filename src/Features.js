@@ -11,12 +11,19 @@ class Features {
         this.setColorPalette();
 
 
-        //drives bubble density in the textures generation
+        //how many donuts are we serving?
         this.density = {
             tag: "",
             value: 0
         }
         this.setDensity();
+
+        //how noisy is our color story?
+        this.noise = {
+            tag: "",
+            value: 0
+        }
+        this.setNoise();
 
         //which wireframe geometry - donut or sphere?
         this.wireframe = {
@@ -169,7 +176,6 @@ class Features {
         }
     }
 
-    //set texture density
     setDensity(){
         let d = fxrand();
         if (d < 0.33) {
@@ -185,6 +191,20 @@ class Features {
             this.density.tag = "Packed"
         }
         this.density.value = d;
+    }
+
+    setNoise(){
+        const n = fxrand();
+        if (n < 0.29) {
+            this.noise.tag = "Quiet"
+        }
+        else if ( n < 0.79) {
+            this.noise.tag = "Nice"
+        }
+        else {
+            this.noise.tag = "Noisy"
+        }
+        this.noise.value = n;
     }
 
     setGeometries() {
