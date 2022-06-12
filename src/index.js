@@ -79,7 +79,7 @@ function init() {
   controls.enableDamping=true;
   controls.dampingFactor = 0.2;
   controls.autoRotate= true;
-  controls.autoRotateSpeed = 1.0;
+  controls.autoRotateSpeed = 0.5;
   controls.maxDistance = 10;
   controls.minDistance = 1;
 
