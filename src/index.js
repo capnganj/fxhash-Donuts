@@ -19,15 +19,14 @@ window.$fxhashFeatures = {
   "Density": feet.density.tag,
   "Noise": feet.noise.tag,
   "Base Geometry": feet.wireframe.tag,
-  "Toon Geometries": feet.toonGeom.tag
+  "Toon Geometries": feet.toonGeom.tag,
+  "Zoom": feet.zoom.tag
 };
 console.log(window.$fxhashFeatures);
 //console.log(feet);
 
 //vars related to fxhash preview call
-//loaded tracks whether texture has loaded;
 //previewed tracks whether preview has been called
-let loaded = false;
 let previewed = false;
 
 //from fxhash webpack boilerplate
@@ -62,7 +61,7 @@ function init() {
   document.body.appendChild( renderer.domElement );
 
   camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.01, 100 );
-  camera.position.set( 4.20, 4.20, 4.20 );
+  camera.position.set( feet.zoom.value, feet.zoom.value, feet.zoom.value );
 
   //lights
   const p1 = new THREE.PointLight( 0xcccccc, 0.666 );
@@ -78,9 +77,9 @@ function init() {
   controls = new OrbitControls( camera, renderer.domElement );
   controls.enableDamping=true;
   controls.dampingFactor = 0.2;
-  controls.autoRotate= true;
+  //controls.autoRotate= true;
   controls.autoRotateSpeed = 0.5;
-  controls.maxDistance = 10;
+  controls.maxDistance = 7;
   controls.minDistance = 1;
 
 
@@ -92,13 +91,13 @@ function init() {
   if (feet.wireframe.tag.includes("Hole")) {
     wireframe = new THREE.IcosahedronBufferGeometry(
       3, 
-      Math.round(feet.map(feet.density.value, 0, 1, 3, 11))
+      Math.round(feet.map(feet.density.value, 0, 1, 4, 11))
     );
   } else {
     wireframe = new THREE.TorusBufferGeometry(
       2, 1,
-      Math.round(feet.map(feet.density.value, 0, 1, 15, 25)),
-      Math.round(feet.map(feet.density.value, 0, 1, 30, 40))
+      Math.round(feet.map(feet.density.value, 0, 1, 20, 27)),
+      Math.round(feet.map(feet.density.value, 0, 1, 35, 45))
     );
     if (feet.wireframe.tag.includes("Left")) {
       wireframe.rotateY(Math.PI/2)
@@ -214,10 +213,10 @@ function render() {
 
   effect.render( scene, camera );
 
-  if(previewed == false && loaded == true && renderer.info.render.frame > 100){
+  if(previewed == false && renderer.info.render.frame > 1){
     fxpreview();
     previewed = true;
-    //download();
+    download();
   } 
 
   //mesh.rotation.y += 0.001;

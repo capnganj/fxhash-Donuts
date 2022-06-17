@@ -35,6 +35,13 @@ class Features {
             tag: "",
         }
         this.setGeometries();
+
+        //camera zoom position
+        this.zoom = {
+            tag: "",
+            value: 0.0
+        }
+        this.setZoom();
     }
 
     //map function logic from processing <3
@@ -238,6 +245,23 @@ class Features {
         else  {
             this.toonGeom.tag = "Donut Holes";
         } 
+    }
+
+    setZoom() {
+        let z = fxrand();
+        if (z < 0.27) {
+         this.zoom.tag = "Way In"   
+        }
+        else if ( z < 0.59) {
+            this.zoom.tag = "In"  
+        }
+        else if ( z < 0.79) {
+            this.zoom.tag = "Out"  
+        }
+        else {
+            this.zoom.tag = "Far Out"  
+        }
+        this.zoom.value = this.map(z, 0, 1, 2, 3);
     }
 }
 
