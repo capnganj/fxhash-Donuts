@@ -211,10 +211,10 @@ class Features {
     setDensity(){
         let d = fxrand();
         if (d < 0.33) {
-            this.density.tag = "Sparse";
+            this.density.tag = "Airy";
         }
         else if (d < 0.55) {
-            this.density.tag = "Nice";
+            this.density.tag = "Fluffy";
         }
         else if (d < 0.88) {
             this.density.tag = "Dense";
@@ -230,8 +230,11 @@ class Features {
         if (n < 0.29) {
             this.noise.tag = "Quiet"
         }
-        else if ( n < 0.79) {
+        else if ( n < 0.59) {
             this.noise.tag = "Nice"
+        }
+        else if ( n < 0.89) {
+            this.noise.tag = "Loud"
         }
         else {
             this.noise.tag = "Noisy"
@@ -244,13 +247,13 @@ class Features {
         let toon = fxrand();
 
         //wireframe geometry selection
-        if (wire < 0.11) {
+        if (wire < 0.22) {
             this.wireframe.tag = "Left Donut";
         }
-        else if (wire < 0.22) {
+        else if (wire < 0.44) {
             this.wireframe.tag = "Right Donut";
         } 
-        else if (wire < 0.33) {
+        else if (wire < 0.55) {
             this.wireframe.tag = "Donut";
         } 
         else {
@@ -258,13 +261,13 @@ class Features {
         }
 
         //toon geometry selection
-        if (toon < 0.14) {
+        if (toon < 0.22) {
             this.toonGeom.tag = "Left Donuts";
         }
-        else if (toon < 0.29) {
+        else if (toon < 0.55) {
             this.toonGeom.tag = "Right Donuts"
         }
-        else if (toon < 0.41) {
+        else if (toon < 0.77) {
             this.toonGeom.tag = "Donuts"
         }
         else  {
@@ -291,29 +294,33 @@ class Features {
 
     setBackground() {
         let b = fxrand();
-        if (b < 0.35) {
+        if (b < 0.444) {
             this.background.tag = "Rolling Paper";
             this.background.value = new THREE.Color(235/255, 213/255, 179/255);
         }
-        else if (b < 0.47) {
-            this.background.tag = "fxhash's Dark";
+        else if (b < 0.555) {
+            this.background.tag = "fxhash Dark";
             this.background.value = new THREE.Color(38/255, 38/255, 38/255);
         }
-        else if (b < 0.59) {
-            this.background.tag = "fxhash's Light";
-            this.background.value = new THREE.Color(1, 1, 1);
+        else if (b < 0.666) {
+            this.background.tag = "Newspaper";
+            this.background.value = new THREE.Color(245/255, 242/255, 232/255);
         }
-        else if (b < 0.71) {
+        else if (b < 0.888) {
+            this.background.tag = "Brown Paper Bag";
+            this.background.value = new THREE.Color(181/255, 155/255, 124/255);
+        }
+        else if (b < 0.91) {
             this.background.tag = "Palette Light";
             let col = this.interpolateFn(this.map(fxrand(), 0, 1, 0.66, 0.99));
             this.background.value = new THREE.Color( col.r/255, col.g/255, col.b/255);
         }
-        else if (b < 0.81) {
+        else if (b < 0.94) {
             this.background.tag = "Palette Dark";
             let col = this.interpolateFn(this.map(fxrand(), 0, 1, 0.01, 0.33));
             this.background.value = new THREE.Color( col.r/255, col.g/255, col.b/255);
         }
-        else if (b < 0.94) {
+        else if (b < 0.97) {
             this.background.tag = "Palette Invert Light";
             let col = this.interpolateFn(this.map(fxrand(), 0, 1, 0.66, 0.99));
             col = this.invertColor(col);
