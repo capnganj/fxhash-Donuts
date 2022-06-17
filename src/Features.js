@@ -250,9 +250,12 @@ class Features {
         if (wire < 0.22) {
             this.wireframe.tag = "Left Donut";
         }
-        else if (wire < 0.44) {
+        else if (wire < 0.33) {
             this.wireframe.tag = "Right Donut";
-        } 
+        }
+        else if (wire < 0.44) {
+            this.wireframe.tag = "Random Donut";
+        }  
         else if (wire < 0.55) {
             this.wireframe.tag = "Donut";
         } 
@@ -264,9 +267,12 @@ class Features {
         if (toon < 0.22) {
             this.toonGeom.tag = "Left Donuts";
         }
-        else if (toon < 0.55) {
+        else if (toon < 0.44) {
             this.toonGeom.tag = "Right Donuts"
         }
+        // else if (toon < 0.55) {
+        //     this.toonGeom.tag = "Random Donuts"
+        // }
         else if (toon < 0.77) {
             this.toonGeom.tag = "Donuts"
         }

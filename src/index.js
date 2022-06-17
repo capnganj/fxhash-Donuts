@@ -105,6 +105,11 @@ function init() {
     } 
     else if (feet.wireframe.tag.includes("Right")) {
     }
+    else if (feet.wireframe.tag.includes("Random")) {
+      wireframe.rotateX(feet.map(fxrand(), 0, 1, 0, Math.PI/2));
+      wireframe.rotateY(feet.map(fxrand(), 0, 1, 0, Math.PI/2));
+      wireframe.rotateZ(feet.map(fxrand(), 0, 1, 0, Math.PI/2));
+    }
     else {
       wireframe.rotateX(Math.PI/2);
     }
@@ -116,7 +121,7 @@ function init() {
   if (feet.toonGeom.tag.includes("Holes")) {
     toonGeometry = new THREE.SphereBufferGeometry(0.1);
   } else {
-    toonGeometry = new THREE.TorusBufferGeometry(0.1, 0.05, 10, 20 )
+    toonGeometry = new THREE.TorusBufferGeometry(0.1, 0.05, 20, 50 )
     if (feet.toonGeom.tag.includes("Left")) {
       toonGeometry.rotateY(Math.PI/2)
     } 
@@ -156,8 +161,17 @@ function init() {
   //loop over torus and instantiate meshes with random colors
   for (let i = 0, u = 0; i < wireframe.attributes.position.count * 3; i=i+3, u=u+2) {
     
-    //position
+    //matrix
     const m = new THREE.Matrix4();
+
+    // //roatation
+    // if (feet.toonGeom.tag.includes("Random")) {
+    //   m.makeRotationAxis(new THREE.Vector3(1,0,0), feet.map(fxrand(), 0, 1, Math.PI * 2 * -1, Math.PI * 2));
+    //   m.makeRotationAxis(new THREE.Vector3(0,1,0), feet.map(fxrand(), 0, 1, Math.PI * 2 * -1, Math.PI * 2));
+    //   m.makeRotationAxis(new THREE.Vector3(0,0,1), feet.map(fxrand(), 0, 1, Math.PI * 2 * -1, Math.PI * 2))
+    // }
+
+    //position
     m.setPosition(wireframe.attributes.position.array[i], wireframe.attributes.position.array[i+1], wireframe.attributes.position.array[i+2]);
 
     //size
@@ -170,7 +184,9 @@ function init() {
 
     iMesh.setMatrixAt(i/3, m);
 
-    //colors
+
+
+    //color
 
     //use noise value to set up a random addition value - how far do we want to jump inside of the gradient?
     const rgbNoise = feet.map(fxrand(), 0, 1, feet.noise.value * -1, feet.noise.value)
