@@ -1,4 +1,4 @@
-import { interpolateYlOrRd, interpolateInferno, interpolateMagma, interpolatePuBuGn, interpolatePlasma, interpolateRdPu, interpolateViridis, interpolateCividis, interpolateYlGnBu, interpolateYlGn, interpolateYlOrBr } from 'd3-scale-chromatic'
+import { interpolateYlOrRd, interpolateInferno, interpolateMagma, interpolatePuBuGn, interpolatePlasma, interpolateRdPu, interpolateViridis, interpolateCividis, interpolateYlGnBu, interpolateYlGn, interpolateYlOrBr, interpolateSinebow, interpolateRainbow, interpolateWarm } from 'd3-scale-chromatic'
 import { rgb, hsl, color } from 'd3-color';
 
 class Features {
@@ -29,7 +29,6 @@ class Features {
         this.wireframe = {
             tag: "",
         }
-
         //which toon geometries - donuts or sheres or both?
         this.toonGeom = {
             tag: "",
@@ -86,6 +85,15 @@ class Features {
                 break;
             case "Ylorbr":
                 col = rgb(interpolateYlOrBr(1-val));
+                break;
+            case "Sinebow":
+                col = rgb(interpolateSinebow(val));
+                break;
+            case "Rainbow":
+                col = rgb(interpolateRainbow(val));
+                break;
+            case "Warm":
+                col = rgb(interpolateWarm(val));
                 break;
             default:
                 col = rgb(interpolateMagma(val));
@@ -145,35 +153,44 @@ class Features {
         if (c < 0.07) { //1
             this.color.name = "Ylorrd"
         }
-        else if (c < 0.14) { //2
+        else if (c < 0.11) { //2
             this.color.name = "Rdpu"
         }
-        else if (c < 0.21) { //3
+        else if (c < 0.19) { //3
             this.color.name = "Ylgn"
         }
-        else if (c < 0.28) {  //4
+        else if (c < 0.25) {  //4
             this.color.name = "Pubugn"
         }
-        else if (c < 0.35) { //5
+        else if (c < 0.32) { //5
             this.color.name = "Ylgnbu"
         }
-        else if (c < 0.44) { //6
+        else if (c < 0.41) { //6
             this.color.name = "Viridis" 
         }
-        else if (c < 0.55) {  //7
+        else if (c < 0.49) {  //7
             this.color.name = "Inferno" 
         }
-        else if (c < 0.66) {  //8
+        else if (c < 0.56) {  //8
             this.color.name = "Plasma" 
         }
-        else if (c < 0.77) {  //9
+        else if (c < 0.63) {  //9
             this.color.name = "Cividis" 
         }
-        else if (c < 0.88) {  //11
+        else if (c < 0.71) {  //11
             this.color.name = "Ylorbr" 
         }
+        else if (c < 0.76) {  //12
+            this.color.name = "Rainbow" 
+        }
+        else if (c < 0.82) {  //13
+            this.color.name = "Sinebow" 
+        }
+        else if (c < 0.92) {  //13
+            this.color.name = "Warm" 
+        }
         //...
-        else {  //11
+        else {  //12
             this.color.name = "Magma"  
         }
 
