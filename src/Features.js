@@ -1,5 +1,6 @@
 import { interpolateYlOrRd, interpolateInferno, interpolateMagma, interpolatePuBuGn, interpolatePlasma, interpolateRdPu, interpolateViridis, interpolateCividis, interpolateYlGnBu, interpolateYlGn, interpolateYlOrBr, interpolateSinebow, interpolateRainbow, interpolateWarm } from 'd3-scale-chromatic'
 import { rgb, hsl, color } from 'd3-color';
+import * as THREE from 'three';
 
 class Features {
     constructor() {
@@ -41,6 +42,13 @@ class Features {
             value: 0.0
         }
         this.setZoom();
+
+        //background color
+        this.background = {
+            tag: "",
+            value: {}
+        }
+        this.setBackground();
     }
 
     //map function logic from processing <3
@@ -279,6 +287,44 @@ class Features {
             this.zoom.tag = "Far Out"  
         }
         this.zoom.value = this.map(z, 0, 1, 2, 3);
+    }
+
+    setBackground() {
+        let b = fxrand();
+        if (b < 0.35) {
+            this.background.tag = "Rolling Paper";
+            this.background.value = new THREE.Color(235/255, 213/255, 179/255);
+        }
+        else if (b < 0.47) {
+            this.background.tag = "fxhash's Dark";
+            this.background.value = new THREE.Color(38/255, 38/255, 38/255);
+        }
+        else if (b < 0.59) {
+            this.background.tag = "fxhash's Light";
+            this.background.value = new THREE.Color(1, 1, 1);
+        }
+        else if (b < 0.71) {
+            this.background.tag = "Palette Light";
+            let col = this.interpolateFn(this.map(fxrand(), 0, 1, 0.66, 0.99));
+            this.background.value = new THREE.Color( col.r/255, col.g/255, col.b/255);
+        }
+        else if (b < 0.81) {
+            this.background.tag = "Palette Dark";
+            let col = this.interpolateFn(this.map(fxrand(), 0, 1, 0.01, 0.33));
+            this.background.value = new THREE.Color( col.r/255, col.g/255, col.b/255);
+        }
+        else if (b < 0.94) {
+            this.background.tag = "Palette Invert Light";
+            let col = this.interpolateFn(this.map(fxrand(), 0, 1, 0.66, 0.99));
+            col = this.invertColor(col);
+            this.background.value = new THREE.Color( col.r/255, col.g/255, col.b/255);
+        }
+        else {
+            this.background.tag = "Palette Invert Dark";
+            let col = this.interpolateFn(this.map(fxrand(), 0, 1, 0.01, 0.33));
+            col = this.invertColor(col);
+            this.background.value = new THREE.Color( col.r/255, col.g/255, col.b/255);
+        }
     }
 }
 

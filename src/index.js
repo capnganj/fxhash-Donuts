@@ -20,7 +20,8 @@ window.$fxhashFeatures = {
   "Noise": feet.noise.tag,
   "Base Geometry": feet.wireframe.tag,
   "Toon Geometries": feet.toonGeom.tag,
-  "Zoom": feet.zoom.tag
+  "Zoom": feet.zoom.tag,
+  "Background": feet.background.tag
 };
 console.log(window.$fxhashFeatures);
 //console.log(feet);
@@ -49,7 +50,7 @@ init();
 function init() {
   //scene & camera
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(235/255, 213/255, 179/255);
+  scene.background = feet.background.value;
 
   renderer = new THREE.WebGLRenderer( { 
     antialias: true,
