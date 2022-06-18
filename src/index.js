@@ -94,7 +94,33 @@ function init() {
       3, 
       Math.round(feet.map(feet.density.value, 0, 1, 4, 11))
     );
-  } else {
+    wireframe.rotateX(feet.map(fxrand(), 0, 1, 0, Math.PI/3));
+    wireframe.rotateY(feet.map(fxrand(), 0, 1, 0, Math.PI/3));
+  } 
+
+  else if (feet.wireframe.tag.includes("Bang!")) {
+    wireframe = new THREE.BufferGeometry();
+    let positions = [];
+    let count = Math.round(feet.map(feet.density.value, 0, 1, 123, 456));
+    for (let i = 0; i < count; i++) {
+      let u = fxrand();
+      let x1 = feet.map(fxrand(), 0, 1, -1, 1);
+      let x2 = feet.map(fxrand(), 0, 1, -1, 1);
+      let x3 = feet.map(fxrand(), 0, 1, -1, 1);
+      let mag = Math.sqrt(x1*x1 + x2*x2 + x3*x3);
+      x1 /= mag; 
+      x2 /= mag; 
+      x3 /= mag;
+      let c = Math.cbrt(u);
+      let v = new THREE.Vector3(x1*c, x2*c, x3*c).multiplyScalar(3.5);
+      positions.push(v.x);
+      positions.push(v.y);
+      positions.push(v.z);
+    }
+    wireframe.setAttribute('position', new THREE.Float32BufferAttribute( positions, 3 ));
+  }
+
+  else {
     wireframe = new THREE.TorusBufferGeometry(
       2, 1,
       Math.round(feet.map(feet.density.value, 0, 1, 20, 27)),
@@ -115,6 +141,8 @@ function init() {
     }
   }
   wireframe.computeBoundingBox();
+
+
 
   //toon geometries - donuts and donut holes that hang on the wireframe's vertices
   let toonGeometry = {}
@@ -164,18 +192,18 @@ function init() {
     //matrix
     const m = new THREE.Matrix4();
 
-    // //roatation
-    // if (feet.toonGeom.tag.includes("Random")) {
-    //   m.makeRotationAxis(new THREE.Vector3(1,0,0), feet.map(fxrand(), 0, 1, Math.PI * 2 * -1, Math.PI * 2));
-    //   m.makeRotationAxis(new THREE.Vector3(0,1,0), feet.map(fxrand(), 0, 1, Math.PI * 2 * -1, Math.PI * 2));
-    //   m.makeRotationAxis(new THREE.Vector3(0,0,1), feet.map(fxrand(), 0, 1, Math.PI * 2 * -1, Math.PI * 2))
-    // }
+    //roatation
+    if (feet.toonGeom.tag.includes("Random")) {
+      m.makeRotationAxis(new THREE.Vector3(1,0,0), feet.map(fxrand(), 0, 1, 0, Math.PI * 2));
+      m.makeRotationAxis(new THREE.Vector3(0,1,0), feet.map(fxrand(), 0, 1, 0, Math.PI * 2));
+      m.makeRotationAxis(new THREE.Vector3(0,0,1), feet.map(fxrand(), 0, 1, 0, Math.PI * 2))
+    }
 
     //position
     m.setPosition(wireframe.attributes.position.array[i], wireframe.attributes.position.array[i+1], wireframe.attributes.position.array[i+2]);
 
     //size
-    if (!feet.wireframe.tag.includes("Hole")) {
+    if (!feet.wireframe.tag.includes("Hole") && !feet.wireframe.tag.includes("Bang!")) {
       const s = u < wireframe.attributes.uv.count ? 
         feet.map(wireframe.attributes.uv.array[u+1], 0, 0.5, 1, 0.4) :
         feet.map(wireframe.attributes.uv.array[u+1], 0.5, 1.0, 0.4, 1) ;

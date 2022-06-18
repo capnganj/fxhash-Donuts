@@ -250,14 +250,17 @@ class Features {
         if (wire < 0.22) {
             this.wireframe.tag = "Left Donut";
         }
-        else if (wire < 0.33) {
+        else if (wire < 0.41) {
             this.wireframe.tag = "Right Donut";
         }
-        else if (wire < 0.44) {
+        else if (wire < 0.49) {
             this.wireframe.tag = "Random Donut";
         }  
         else if (wire < 0.55) {
             this.wireframe.tag = "Donut";
+        } 
+        else if (wire < 0.73) {
+            this.wireframe.tag = "Bang!";
         } 
         else {
             this.wireframe.tag = "Donut Hole"
@@ -279,6 +282,11 @@ class Features {
         else  {
             this.toonGeom.tag = "Donut Holes";
         } 
+
+        //bang override
+        if (this.wireframe.tag == "Bang!" && toon < 0.88) {
+            this.toonGeom.tag = "Random Donuts"
+        }
     }
 
     setZoom() {
