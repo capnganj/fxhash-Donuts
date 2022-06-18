@@ -266,7 +266,7 @@ function render() {
   if(previewed == false && renderer.info.render.frame > 1){
     fxpreview();
     previewed = true;
-    download();
+    //download();
   } 
 
   //mesh.rotation.y += 0.001;
