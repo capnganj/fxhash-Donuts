@@ -291,19 +291,23 @@ class Features {
 
     setZoom() {
         let z = fxrand();
-        if (z < 0.27) {
-         this.zoom.tag = "Way In"   
+        if (z < 0.35) {
+         this.zoom.tag = "Way In"
+         this.zoom.value = this.map(z, 0, 1, 2, 2.75);   
         }
-        else if ( z < 0.59) {
-            this.zoom.tag = "In"  
+        else if ( z < 0.66) {
+            this.zoom.tag = "In"
+            this.zoom.value = this.map(z, 0, 1, 2, 3);  
         }
-        else if ( z < 0.79) {
-            this.zoom.tag = "Out"  
+        else if ( z < 0.89) {
+            this.zoom.tag = "Out"
+            this.zoom.value = this.map(z, 0, 1, 2, 3);  
         }
         else {
-            this.zoom.tag = "Far Out"  
+            this.zoom.tag = "Far Out"
+            this.zoom.value = this.map(z, 0, 1, 2, 4);  
         }
-        this.zoom.value = this.map(z, 0, 1, 2, 3);
+        
     }
 
     setBackground() {
