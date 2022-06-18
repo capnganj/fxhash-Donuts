@@ -183,8 +183,6 @@ function init() {
   if (feet.wireframe.tag.includes("Hole")) {
     noDupes = removeDuplicateVertices(noDupes);
   }
-  console.log(wireframe.attributes.position.array.length);
-  console.log(noDupes.length);
 
   //loop over torus and instantiate meshes with random colors
   for (let i = 0, u = 0; i < noDupes.length; i=i+3, u=u+2) {
@@ -194,9 +192,16 @@ function init() {
 
     //roatation
     if (feet.toonGeom.tag.includes("Random")) {
-      m.makeRotationAxis(new THREE.Vector3(1,0,0), feet.map(fxrand(), 0, 1, 0, Math.PI * 2));
-      m.makeRotationAxis(new THREE.Vector3(0,1,0), feet.map(fxrand(), 0, 1, 0, Math.PI * 2));
-      m.makeRotationAxis(new THREE.Vector3(0,0,1), feet.map(fxrand(), 0, 1, 0, Math.PI * 2))
+      let r = fxrand();
+      if (r < 0.33) {
+        m.makeRotationAxis(new THREE.Vector3(1,0,0), feet.map(fxrand(), 0, 1, 0, Math.PI * 2));
+      } 
+      else if (r < 0.66) {
+        m.makeRotationAxis(new THREE.Vector3(0,1,0), feet.map(fxrand(), 0, 1, 0, Math.PI * 2));
+      }
+      else {
+        m.makeRotationAxis(new THREE.Vector3(0,0,1), feet.map(fxrand(), 0, 1, 0, Math.PI * 2))
+      }
     }
 
     //position

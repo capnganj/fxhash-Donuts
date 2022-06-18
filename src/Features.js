@@ -287,6 +287,9 @@ class Features {
         if (this.wireframe.tag == "Bang!" && toon < 0.88) {
             this.toonGeom.tag = "Random Donuts"
         }
+        if (this.wireframe.tag == "Donut Hole" && toon < 0.13) {
+            this.toonGeom.tag = "Random Donuts"
+        }
     }
 
     setZoom() {
