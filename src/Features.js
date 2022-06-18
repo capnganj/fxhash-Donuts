@@ -239,7 +239,7 @@ class Features {
         else {
             this.noise.tag = "Noisy"
         }
-        this.noise.value = n;
+        this.noise.value = this.map(n, 0, 1, 0.1, 0.77);
     }
 
     setGeometries() {
@@ -270,7 +270,7 @@ class Features {
         if (toon < 0.22) {
             this.toonGeom.tag = "Left Donuts";
         }
-        else if (toon < 0.44) {
+        else if (toon < 0.55) {
             this.toonGeom.tag = "Right Donuts"
         }
         // else if (toon < 0.55) {

@@ -219,7 +219,7 @@ function init() {
     //use noise value to set up a random addition value - how far do we want to jump inside of the gradient?
     const rgbNoise = feet.map(fxrand(), 0, 1, feet.noise.value * -1, feet.noise.value)
     const y = feet.map(wireframe.attributes.position.array[i+1], wireframe.boundingBox.min.y, wireframe.boundingBox.max.y, 0, 1)
-    const t = feet.map(rgbNoise + y, 0, 1, 0, 1);
+    const t = feet.map(rgbNoise + y, 0-feet.noise.value, 1+feet.noise.value, 0, 1);
 
     const rgb = feet.interpolateFn(feet.color.inverted ? 1-t : t);
     const col = new THREE.Color(rgb.r/255, rgb.g/255, rgb.b/255);
