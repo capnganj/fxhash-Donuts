@@ -159,17 +159,9 @@ function init() {
       toonGeometry.rotateX(Math.PI/2)
     }
   }
-  //const sphere = new THREE.SphereBufferGeometry(0.1);
-  //const pill = new THREE.CapsuleBufferGeometry(0.1, 0.2, 10, 20)
-  //const miniTorus = new THREE.TorusBufferGeometry(0.1, 0.05, 10, 20 )
-  //miniTorus.rotateY(Math.PI/2)
 
-  
 
-  //Normal
-  //const m = new THREE.MeshNormalMaterial()
-
-  //toon
+  //toon material 
   const format = ( renderer.capabilities.isWebGL2 ) ? THREE.RedFormat : THREE.LuminanceFormat;
   const colors = new Uint8Array(7);
   for (let c = 0; c < colors.length; c++) {
@@ -182,12 +174,20 @@ function init() {
     gradientMap: gradientMap
   });
 
-  //mesh instance geometry for battery life
+  //mesh instance geometry for nappiness and battery life
   const iMesh = new THREE.InstancedMesh(toonGeometry, toon, wireframe.attributes.position.count,);
   scene.add(iMesh)
 
+  //remove duplicate points in the buffer for donut holes
+  let noDupes = wireframe.attributes.position.array;
+  if (feet.wireframe.tag.includes("Hole")) {
+    noDupes = removeDuplicateVertices(noDupes);
+  }
+  console.log(wireframe.attributes.position.array.length);
+  console.log(noDupes.length);
+
   //loop over torus and instantiate meshes with random colors
-  for (let i = 0, u = 0; i < wireframe.attributes.position.count * 3; i=i+3, u=u+2) {
+  for (let i = 0, u = 0; i < noDupes.length; i=i+3, u=u+2) {
     
     //matrix
     const m = new THREE.Matrix4();
@@ -200,7 +200,7 @@ function init() {
     }
 
     //position
-    m.setPosition(wireframe.attributes.position.array[i], wireframe.attributes.position.array[i+1], wireframe.attributes.position.array[i+2]);
+    m.setPosition(noDupes[i], noDupes[i+1], noDupes[i+2]);
 
     //size
     if (!feet.wireframe.tag.includes("Hole") && !feet.wireframe.tag.includes("Bang!")) {
@@ -277,4 +277,21 @@ function download() {
   link.download = 'Torus.png';
   link.href = document.getElementById('hashish').toDataURL()
   link.click();
+}
+
+function removeDuplicateVertices(vertices) {
+  var positionLookup = [];
+  var final = [];
+
+  for( let i = 0; i < vertices.length-3; i += 3 ) {
+      var index = vertices[i] + vertices[i + 1] + vertices[i + 2];
+
+      if( positionLookup.indexOf( index ) == -1 ) {
+          positionLookup.push( index );
+          final.push(vertices[i])
+          final.push(vertices[i+1])
+          final.push(vertices[i+2])
+      }
+  }
+  return final;
 }
