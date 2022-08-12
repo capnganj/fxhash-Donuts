@@ -1,2 +1,2 @@
-# fxhash-Torus
-Generative 3d model / interactive drawing experiment
+# fxhash-Donuts
+Generative 3d model / interactive drawing experiment --- cartoon style Donuts!
